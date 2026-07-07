@@ -1,39 +1,39 @@
 import type { CSSProperties } from 'react'
 
 export const editableRootStyle = {
-  // Yelp-style system: clean white surfaces, signature red accent, hairline
-  // gray borders, near-black text. Flat (no gradients), generous and premium.
+  // ScreenSkills-inspired editorial system: white space, deep navy type,
+  // hot pink action color, and soft blue-gray borders.
   '--slot4-page-bg': '#ffffff',
-  '--slot4-page-text': '#1a1a1a',
-  '--slot4-panel-bg': '#f7f7f7',
+  '--slot4-page-text': '#100a4f',
+  '--slot4-panel-bg': '#f6f7fb',
   '--slot4-surface-bg': '#ffffff',
-  '--slot4-muted-text': '#6b6b6b',
-  '--slot4-soft-muted-text': '#999999',
-  '--slot4-accent': '#d32323',
-  '--slot4-accent-fill': '#d32323',
-  '--slot4-accent-soft': '#fdecec',
+  '--slot4-muted-text': '#536c8d',
+  '--slot4-soft-muted-text': '#8d99b3',
+  '--slot4-accent': '#ff0090',
+  '--slot4-accent-fill': '#ff0090',
+  '--slot4-accent-soft': '#ffe1f2',
   '--slot4-on-accent': '#ffffff',
-  '--slot4-dark-bg': '#1a1a1a',
+  '--slot4-dark-bg': '#120d55',
   '--slot4-dark-text': '#ffffff',
-  '--slot4-media-bg': '#eeeeee',
+  '--slot4-media-bg': '#eef2f8',
   '--slot4-cream': '#ffffff',
-  '--slot4-warm': '#f7f7f7',
-  '--slot4-lavender': '#ffffff',
-  '--slot4-gray': '#f7f7f7',
+  '--slot4-warm': '#f8f9fd',
+  '--slot4-lavender': '#f1f0ff',
+  '--slot4-gray': '#eef2f8',
   '--slot4-body-gradient': 'none',
   '--editable-page-bg': '#ffffff',
-  '--editable-page-text': '#1a1a1a',
-  '--editable-container': '1500px',
-  '--editable-border': '#e6e6e6',
+  '--editable-page-text': '#100a4f',
+  '--editable-container': '1680px',
+  '--editable-border': '#dbe2ee',
   '--editable-nav-bg': '#ffffff',
-  '--editable-nav-text': '#1a1a1a',
-  '--editable-nav-active': '#d32323',
+  '--editable-nav-text': '#100a4f',
+  '--editable-nav-active': '#ff0090',
   '--editable-nav-active-text': '#ffffff',
-  '--editable-cta-bg': '#d32323',
+  '--editable-cta-bg': '#ff0090',
   '--editable-cta-text': '#ffffff',
   '--editable-search-bg': '#ffffff',
-  '--editable-footer-bg': '#ffffff',
-  '--editable-footer-text': '#1a1a1a',
+  '--editable-footer-bg': '#000000',
+  '--editable-footer-text': '#ffffff',
 } as CSSProperties
 
 export const editablePalette = {
@@ -59,15 +59,15 @@ export const editablePalette = {
   grayBg: 'bg-[var(--slot4-gray)]',
   border: 'border-[var(--editable-border)]',
   darkBorder: 'border-white/10',
-  shadow: 'shadow-[0_1px_3px_rgba(0,0,0,0.08)]',
-  shadowStrong: 'shadow-[0_4px_18px_rgba(0,0,0,0.12)]',
+  shadow: 'shadow-[0_18px_48px_rgba(16,10,79,0.08)]',
+  shadowStrong: 'shadow-[0_28px_70px_rgba(16,10,79,0.14)]',
   overlay: 'bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.72))]',
 } as const
 
 export const editableDesignContract = {
   shell: {
     page: `min-h-screen ${editablePalette.pageBg} ${editablePalette.pageText}`,
-    section: 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
+    section: 'mx-auto w-full max-w-[var(--editable-container)] px-4 sm:px-6 lg:px-8',
     sectionY: 'py-14 sm:py-16 lg:py-20',
   },
   layout: {
