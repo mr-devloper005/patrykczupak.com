@@ -21,11 +21,27 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-const stripHtml = (value: string) => value.replace(/<[^>]*>/g, ' ')
-const compactText = (value: unknown) => typeof value === 'string' ? stripHtml(value).replace(/\s+/g, ' ').trim().toLowerCase() : ''
+const HTML_ENTITIES: Record<string, string> = {
+  amp: '&', apos: "'", gt: '>', lt: '<', nbsp: ' ', quot: '"',
+}
+
+const decodeHtmlEntities = (value: string) => value.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);/gi, (entity, code: string) => {
+  if (code[0] !== '#') return HTML_ENTITIES[code.toLowerCase()] ?? entity
+  const numeric = code[1]?.toLowerCase() === 'x' ? Number.parseInt(code.slice(2), 16) : Number.parseInt(code.slice(1), 10)
+  return Number.isFinite(numeric) ? String.fromCodePoint(numeric) : entity
+})
+
+const plainText = (value: string) => decodeHtmlEntities(value)
+  .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+  .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+  .replace(/<[^>]*>/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+
+const compactText = (value: unknown) => typeof value === 'string' ? plainText(value).toLowerCase() : ''
 const compactRaw = (value: unknown) => typeof value === 'string' ? value.trim() : ''
 const getContent = (post: SitePost) => post.content && typeof post.content === 'object' ? post.content as Record<string, unknown> : {}
-const summaryOf = (post: SitePost) => post.summary || compactRaw(getContent(post).description) || compactRaw(getContent(post).excerpt) || ''
+const summaryOf = (post: SitePost) => plainText(post.summary || compactRaw(getContent(post).description) || compactRaw(getContent(post).excerpt) || '')
 
 const getImage = (post: SitePost) => {
   const content = getContent(post)
@@ -39,6 +55,7 @@ const matches = (post: SitePost, query: string, category: string, task: string) 
   const typeText = compactText(content.type)
   if (typeText === 'comment') return false
   const derivedTask = getPostTaskKey(post) || typeText
+  if (derivedTask === 'profile' || typeText === 'profile') return false
   if (task && derivedTask !== task) return false
   const categoryText = compactText(content.category)
   const tagsText = compactText(Array.isArray(post.tags) ? post.tags.join(' ') : '')
@@ -84,7 +101,7 @@ export default async function SearchPage({ searchParams }: { searchParams?: Prom
   const feed = await fetchSiteFeed(useMaster ? 1000 : 300, useMaster ? { fresh: true, category: category || undefined, task: task || undefined } : undefined)
   const posts = feed?.posts?.length ? feed.posts : useMaster ? [] : SITE_CONFIG.tasks.filter((item) => item.enabled).flatMap((item) => getMockPostsForTask(item.key))
   const results = posts.filter((post) => matches(post, normalized, category, task)).slice(0, normalized ? 80 : 36)
-  const enabledTasks = SITE_CONFIG.tasks.filter((item) => item.enabled)
+  const enabledTasks = SITE_CONFIG.tasks.filter((item) => item.enabled && item.key !== 'profile')
 
   return (
     <EditableSiteShell>
